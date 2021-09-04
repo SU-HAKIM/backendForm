@@ -4,9 +4,12 @@
 
 <div class="container wrapper">
     <div class="row">
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-start">
-            <h3 class="display-4">I am a full stack web developer</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid sed id inventore sint, architecto dolore reiciendis quaerat iusto assumenda necessitatibus asperiores blanditiis facilis, quis sit?</p>
+        <div class="col-md-6 d-flex flex-column justify-content-start align-items-start">
+            <h3 class="display-4">Add Your Todos</h3>
+            <form action="/todo" method="POST" class='form-inline' class='mt-5'><input type="text" name="todo" id="todo" class='mx-2'/><input class='btn btn-warning' type="submit" value="add"></form>
+            <ul class='my-5 list-group' id='empty'>
+
+            </ul>
         </div>
         <div class="col-md-6 ">
             <figure>
