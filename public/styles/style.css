@@ -73,3 +73,6 @@ button {
 .footer {
   margin-top: auto;
 }
+.invalid-feedback {
+  font-size: 1.6rem !important;
+}

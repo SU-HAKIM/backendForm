@@ -4,6 +4,14 @@ const path = require('path');
 
 //?internal imports
 
+//?router
+const userRouter = require('./routes/userRoute');
+
+//?mongoose
+require('./db/conn');
+
+
+
 //?app
 const app = express();
 
@@ -21,8 +29,6 @@ const PORT = process.env.PORT || 5000
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(static_path));
-//?mongoose
-require('./db/conn');
 
 //?route
 app.get('/', (req, res) => {
@@ -31,17 +37,7 @@ app.get('/', (req, res) => {
     })
 })
 
-app.get('/register', (req, res) => {
-    res.render('pages/register', {
-        title: 'Create Account'
-    })
-})
-
-app.get('/login', (req, res) => {
-    res.render('pages/login', {
-        title: 'Log in page'
-    })
-})
+app.use('/user', userRouter);
 
 //?server listening
 
