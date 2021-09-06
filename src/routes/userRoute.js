@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const { body } = require('express-validator');
 const User = require('../model/User');
+const bcrypt = require('bcrypt');
 
-
-const { userGetRegister, userGetLogin, userPostRegister, userPostLogin } = require('../controllers/userController');
+const { userGetRegister, userGetLogin, userPostRegister, userPostLogin, userGetLogout } = require('../controllers/userController');
 
 const registerValidator = [
     body('username')
@@ -56,12 +56,12 @@ const loginValidator = [
         .isEmpty()
         .withMessage('enter password')
         .custom(async (password, { req }) => {
-            console.log(password)
-            let user = await User.findOne({ email: req.email })
+            let user = await User.findOne({ email: req.body.email })
             if (!user) {
                 return Promise.reject('Incorrect information')
             }
-            if (password !== user.password) {
+            let isEqual = await bcrypt.compare(password, user.password)
+            if (!isEqual) {
                 return Promise.reject('Incorrect information')
             }
             return true
@@ -69,17 +69,13 @@ const loginValidator = [
 ]
 
 
-
 router.get('/register', userGetRegister)
 router.get('/login', userGetLogin)
+router.get('/logout', userGetLogout)
+
 
 router.post('/register', registerValidator, userPostRegister)
 router.post('/login', loginValidator, userPostLogin)
 
 
-
-
 module.exports = router;
-/**
- *
- */

@@ -1,8 +1,10 @@
 //?external imports
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 //?internal imports
+const { verifyUser } = require('./middlewares/verify')
 
 //?router
 const userRouter = require('./routes/userRoute');
@@ -29,15 +31,21 @@ const PORT = process.env.PORT || 5000
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(static_path));
+app.use(cookieParser())
 
 //?route
-app.get('/', (req, res) => {
-    res.render('pages/user', {
-        title: 'user profile'
-    })
+app.get('/', verifyUser, (req, res) => {
+    if (req.isLoggedIn) {
+        res.render('pages/user', {
+            title: 'user profile',
+            isLoggedIn: req.isLoggedIn || false
+        })
+    } else {
+        res.redirect('/user/login')
+    }
 })
 
-app.use('/user', userRouter);
+app.use('/user', verifyUser, userRouter);
 
 //?server listening
 
