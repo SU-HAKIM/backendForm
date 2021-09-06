@@ -20,18 +20,20 @@ const registerValidator = [
             if (user) {
                 return Promise.reject('user already in use')
             }
+            return true
         })
         .normalizeEmail(),
     body('password')
         .isLength({ min: 5 })
         .withMessage('password must be above 5 chars'),
-    body('confirmPassword')
+    body('confirmPassword', 'could not get value')
         .isLength({ min: 5 })
         .withMessage('password must be above 5 chars')
         .custom((confirmPassword, { req }) => {
             if (confirmPassword !== req.body.password) {
                 return Promise.reject('password must match')
             }
+            return true
         })
 ]
 
@@ -47,6 +49,7 @@ const loginValidator = [
             if (!user) {
                 return Promise.reject('Incorrect information')
             }
+            return true
         }),
     body('password')
         .not()
@@ -61,6 +64,7 @@ const loginValidator = [
             if (password !== user.password) {
                 return Promise.reject('Incorrect information')
             }
+            return true
         })
 ]
 

@@ -1,4 +1,5 @@
 const User = require('../model/User');
+const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 
 exports.userGetRegister = (req, res) => {
@@ -27,7 +28,16 @@ exports.userPostRegister = async (req, res, next) => {
 
     let { username, email, password, confirmPassword } = req.body;
     try {
-
+        if (password === confirmPassword) {
+            let newPassword = await bcrypt.hash(password, 10);
+            let user = new User({ username, email, newPassword })
+            let token = User.generateToken();
+            const result = await user.save();
+            console.log(token, result)
+            res.redirect('/login')
+        } else {
+            next('password is not matching')
+        }
     } catch (error) {
         next(error)
     }
