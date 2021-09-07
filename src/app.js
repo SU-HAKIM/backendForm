@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
 //?internal imports
 const { verifyUser } = require('./middlewares/verify')
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(static_path));
 app.use(cookieParser())
+app.use(flash())
 
 //?route
 app.get('/', verifyUser, (req, res) => {
@@ -40,6 +42,7 @@ app.get('/', verifyUser, (req, res) => {
             title: 'user profile',
             isLoggedIn: req.isLoggedIn || false
         })
+        req.flash('info', "i am in profile")
     } else {
         res.redirect('/user/login')
     }
